@@ -10,9 +10,13 @@ var outputDir = './html'
 var layout = hb.compile(fs.readFileSync(__dirname + '/assets/templates/layout.hbs').toString())
 var header = hb.compile(fs.readFileSync(__dirname + '/assets/templates/header.hbs').toString())
 var footer = hb.compile(fs.readFileSync(__dirname + '/assets/templates/footer.hbs').toString())
+var indexTemplate = hb.compile(fs.readFileSync(__dirname + '/assets/templates/index.hbs').toString())
 
 readjson(path.join(exerciseDir, 'menu.json'), function (err, exercises) {
   if(err) throw err
+  
+  createIndex(exercises)
+
   exercises
     .forEach(function (exerciseName, index) {
       var exerciseId = idFromName(exerciseName)
@@ -46,7 +50,18 @@ readjson(path.join(exerciseDir, 'menu.json'), function (err, exercises) {
 })
 
 
-
+function createIndex(exercises) {
+  var challenges = exercises.map(function (exercise) {
+    return {name: exercise, url: idFromName(exercise) + '.html'}
+  })
+  
+  var content = indexTemplate({
+    challenges: challenges,
+    workshoppername: 'Learn You Node'
+  })
+  
+  fs.writeFile(path.join(outputDir,  'index.html'), content)
+}
 
 // from workshopper module
 function idFromName (id) {
