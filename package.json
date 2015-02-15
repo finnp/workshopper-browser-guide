@@ -23,6 +23,7 @@
   "homepage": "https://github.com/finnp/workshopper-browser-guide",
   "dependencies": {
     "fs-extra": "^0.16.3",
+    "github-url-from-git": "^1.4.0",
     "handlebars": "^3.0.0",
     "highlight.js": "^8.4.0",
     "marked": "^0.3.3",

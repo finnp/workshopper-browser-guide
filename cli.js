@@ -3,5 +3,5 @@
 var createGuide = require('./')
 
 createGuide(process.cwd(), {
-  name: 'Learn You Node 2'
+  name: 'Learn You Node'
 })

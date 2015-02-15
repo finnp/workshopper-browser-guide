@@ -4,6 +4,7 @@ var marked = require('marked')
 var readjson = require('read-json-file')
 var hb = require('handlebars')
 var highlight = require('highlight.js')
+var githuburlfromgit = require('github-url-from-git')
 
 marked.setOptions({
   highlight: function (code) {
@@ -21,6 +22,9 @@ module.exports = function (moduleDir, opts) {
   opts = opts || {}
   var outputDir = opts.outputDir || path.join(moduleDir, 'guide')
   var exerciseDir = path.join(moduleDir, 'exercises')
+  
+  var packagejson = require(path.join(moduleDir, 'package.json'))
+  var repo = githuburlfromgit(packagejson.repository.url)
   
   try {
     fs.mkdirSync(outputDir)  
@@ -45,7 +49,8 @@ module.exports = function (moduleDir, opts) {
                 preurl: idFromName(exercises[index - 1] || 'index') + '.html',
                 nexturl: idFromName(exercises[index + 1] || 'index') + '.html',
                 prename: exercises[index-1],
-                nextname: exercises[index-1]
+                nextname: exercises[index-1],
+                repo: repo
               }),
               workshoppername: opts.name,
               header: header({
@@ -71,7 +76,8 @@ module.exports = function (moduleDir, opts) {
     
     var content = indexTemplate({
       challenges: challenges,
-      workshoppername: opts.name
+      workshoppername: opts.name,
+      repo: repo
     })
     
     fs.writeFile(path.join(outputDir,  'index.html'), content)
