@@ -1,0 +1,23 @@
+{
+  "name": "workshopper-browser-guide",
+  "version": "1.0.0",
+  "description": "Create an html browser version of the exercise descriptions",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/finnp/workshopper-browser-guide.git"
+  },
+  "keywords": [
+    "workshopper",
+    "nodeschool"
+  ],
+  "author": "Finn Pauls",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/finnp/workshopper-browser-guide/issues"
+  },
+  "homepage": "https://github.com/finnp/workshopper-browser-guide"
+}
