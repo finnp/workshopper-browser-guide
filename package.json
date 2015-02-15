@@ -26,6 +26,7 @@
     "github-url-from-git": "^1.4.0",
     "handlebars": "^3.0.0",
     "highlight.js": "^8.4.0",
+    "local-lang-names": "^1.0.0",
     "marked": "^0.3.3",
     "read-json-file": "^1.0.1"
   }

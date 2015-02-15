@@ -5,6 +5,7 @@ var readjson = require('read-json-file')
 var hb = require('handlebars')
 var highlight = require('highlight.js')
 var githuburlfromgit = require('github-url-from-git')
+var localizeLang = require('local-lang-names')
 
 marked.setOptions({
   highlight: function (code) {
@@ -25,6 +26,8 @@ module.exports = function (moduleDir, opts) {
   
   var packagejson = require(path.join(moduleDir, 'package.json'))
   var repo = githuburlfromgit(packagejson.repository.url)
+  
+  var appName = opts.appName || packagejson.name
   
   var langs = getLanguages()
   
@@ -48,7 +51,7 @@ module.exports = function (moduleDir, opts) {
       
       var content = layout({
         lang: lang.id,
-        body: marked(problem),
+        body: marked(replacePlaceholders(problem)),
         footer: footer({
           preurl: preurl,
           nexturl: nexturl,
@@ -64,7 +67,9 @@ module.exports = function (moduleDir, opts) {
           workshoppername: opts.name,
           preurl: preurl,
           nexturl: nexturl,
-          lang: lang.id
+          lang: lang.id,
+          langs: templateLangs(exerciseId, langs),
+          indexurl: getUrl('index', lang.id)
         })
       })
       
@@ -72,6 +77,25 @@ module.exports = function (moduleDir, opts) {
       
     })
   })
+
+  function replacePlaceholders(contents) {
+    var variables = {
+      appname : appName, 
+      rootdir : moduleDir
+    }
+
+    contents = contents.replace(/\{([^}]+)\}/gi, function (match, k) {
+      return variables[k] || ('{' + k + '}')
+    })
+
+    // proper path resolution
+    contents = contents.replace(/\{rootdir:([^}]+)\}/gi, function (match, subpath) {
+      // how to link this in a sensible way, so that it will work online/offline?
+      return '[' + subpath + '](' + repo + '/blob/master' + subpath + ')'
+    })
+    
+    return contents
+  }
 
   function getExerciseUrl(index, lang) {
     var name = exercises[index]
@@ -92,6 +116,13 @@ module.exports = function (moduleDir, opts) {
     return lang.i18n.exercise ? lang.i18n.exercise[exercise] : exercise
   }
 
+  function templateLangs(id, langs) {
+    return langs.map(function (lang) {
+      return {name: localizeLang(lang.id), url: getUrl(id, lang.id)}
+    })
+  }
+  
+
   function createIndex(exercises, lang) {
     var challenges = exercises.map(function (exercise) {
       return {
@@ -104,9 +135,7 @@ module.exports = function (moduleDir, opts) {
       challenges: challenges,
       workshoppername: opts.name,
       repo: repo,
-      langs: langs.map(function (lang) {
-        return {name: lang.id, url: getUrl('index', lang.id)}
-      })
+      langs: templateLangs('index', langs)
     })
     
     fs.writeFile(path.join(outputDir,  getUrl('index', lang.id)), content)

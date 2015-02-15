@@ -1,10 +1,15 @@
 <header class="site-header">
   <div class="nav u-posFixed">
+    <ul class="nav-lang">
+      {{#langs}}
+        <li><a href="{{url}}" >{{name}}</a></li>
+      {{/langs}}
+    </ul>
     <div class="wrap-width u-textCenter">
       <a href="{{preurl}}"
         <span class="u-floatLeft hand">☜</span>
       </a>
-      <a class="filledblock" href="index.{{lang}}.html">{{workshoppername}}</a>
+      <a class="filledblock" href="{{indexurl}}">{{workshoppername}}</a>
       <a href="{{nexturl}}"
         <span class="u-floatRight hand">☞</span>
       </a>
