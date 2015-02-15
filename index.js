@@ -26,61 +26,103 @@ module.exports = function (moduleDir, opts) {
   var packagejson = require(path.join(moduleDir, 'package.json'))
   var repo = githuburlfromgit(packagejson.repository.url)
   
+  var langs = getLanguages()
+  
   try {
     fs.mkdirSync(outputDir)  
   } catch(e) {}
   
   fs.copySync(path.join(__dirname, 'assets'), path.join(outputDir, 'assets'))
+  
+  var exercises = JSON.parse(fs.readFileSync(path.join(exerciseDir, 'menu.json')))
 
-  readjson(path.join(exerciseDir, 'menu.json'), function (err, exercises) {
-    if(err) throw err
-    
-    createIndex(exercises)
+  langs.forEach(function (lang) {
+    createIndex(exercises, lang)
+    exercises.forEach(function (exerciseName, index) {
+      var exerciseId = idFromName(exerciseName)
+      var filename = (lang.id === 'en' ? 'problem' : 'problem.' + lang.id) + '.md'
+      var problem = fs.readFileSync(path.join(exerciseDir, exerciseId, filename)).toString()
 
-    exercises
-      .forEach(function (exerciseName, index) {
-        var exerciseId = idFromName(exerciseName)
-          fs.readFile(path.join(exerciseDir, exerciseId, 'problem.md'), function (err, data) {
-            if(err) throw err
-            
-            var content = layout({
-              body: marked(data.toString()),
-              footer: footer({
-                preurl: idFromName(exercises[index - 1] || 'index') + '.html',
-                nexturl: idFromName(exercises[index + 1] || 'index') + '.html',
-                prename: exercises[index-1],
-                nextname: exercises[index-1],
-                repo: repo
-              }),
-              workshoppername: opts.name,
-              header: header({
-                challengetitle: exerciseName,
-                challengetotal: exercises.length,
-                challengenumber: index + 1,
-                workshoppername: opts.name,
-                preurl: idFromName(exercises[index - 1] || 'index') + '.html',
-                nexturl: idFromName(exercises[index + 1] || 'index') + '.html'
-              })
-            })
-            
-            fs.writeFile(path.join(outputDir, exerciseId + '.html'), content)
-          })
-      })  
+      var preurl = getExerciseUrl(index - 1, lang.id)
+      var nexturl = getExerciseUrl(index + 1, lang.id)
+      
+      var content = layout({
+        lang: lang.id,
+        body: marked(problem),
+        footer: footer({
+          preurl: preurl,
+          nexturl: nexturl,
+          prename: localizeExerciseName(exercises[index-1], lang),
+          nextname: localizeExerciseName(exercises[index+1], lang),
+          repo: repo
+        }),
+        workshoppername: opts.name,
+        header: header({
+          challengetitle: exerciseName,
+          challengetotal: exercises.length,
+          challengenumber: index + 1,
+          workshoppername: opts.name,
+          preurl: preurl,
+          nexturl: nexturl,
+          lang: lang.id
+        })
+      })
+      
+      fs.writeFile(path.join(outputDir, getUrl(idFromName(exerciseName), lang.id)), content)    
+      
+    })
   })
 
+  function getExerciseUrl(index, lang) {
+    var name = exercises[index]
+    if(name) {
+      return getUrl(idFromName(name), lang)
+    } else {
+      return getUrl('index', lang)
+    }
+  }
 
-  function createIndex(exercises) {
+  function getUrl(id, lang) {
+    var langsuffix = lang === 'en' ? '' : '.' + lang
+    var file = id + langsuffix + '.html'
+    return file
+  }
+  
+  function localizeExerciseName(exercise, lang) {
+    return lang.i18n.exercise ? lang.i18n.exercise[exercise] : exercise
+  }
+
+  function createIndex(exercises, lang) {
     var challenges = exercises.map(function (exercise) {
-      return {name: exercise, url: idFromName(exercise) + '.html'}
+      return {
+        name: localizeExerciseName(exercise, lang),
+        url: getUrl(idFromName(exercise), lang.id)
+      }
     })
     
     var content = indexTemplate({
       challenges: challenges,
       workshoppername: opts.name,
-      repo: repo
+      repo: repo,
+      langs: langs.map(function (lang) {
+        return {name: lang.id, url: getUrl('index', lang.id)}
+      })
     })
     
-    fs.writeFile(path.join(outputDir,  'index.html'), content)
+    fs.writeFile(path.join(outputDir,  getUrl('index', lang.id)), content)
+  }
+  
+  function getLanguages() {
+    var p = path.join(moduleDir, 'i18n')
+    return fs.readdirSync(p)
+      .filter(function (file) {
+        return file.substr(-5) === '.json'
+      })
+      .map(function (file) {
+        var i18n = JSON.parse(fs.readFileSync(path.join(p, file)))
+        var langid = file.substr(0, file.length - 5)
+        return {id: langid, i18n: i18n}
+      })
   }
 }
 

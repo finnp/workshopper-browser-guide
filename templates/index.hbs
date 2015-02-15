@@ -11,15 +11,18 @@
     </head>
   <body class="tableofcontents">
 
+      <ul class="nav-lang">
+        {{#langs}}
+          <li><a href="{{url}}" >{{name}}</a></li>
+        {{/langs}}
+      </ul>
     <div class="wrapper">
-      <header class="weehero">
-        {{workshoppername}}
-      </header>
-      <h2>Welcome to {{workshoppername}}!</h2>
+      <header class="weehero">{{workshoppername}}</header>
+      <!-- <h2>Welcome to {{workshoppername}}!</h2>
       <p>Step-by-step instructions for each of the challenges in the <a href="{{repo}}" target="_blank">{{workshoppername}} workshop</a>.</p>
       <p>This guide comes with {{workshoppername}} when you install it so it works offline and you can use it as a resource at anytime. Have fun!</p>
 
-      <h2>{{workshoppername}} Challenges</h2>
+      <h2>{{workshoppername}} Challenges</h2> -->
 
       <ol class="toc">
         {{#each challenges}}
