@@ -3,6 +3,14 @@ var path = require('path')
 var marked = require('marked')
 var readjson = require('read-json-file')
 var hb = require('handlebars')
+var highlight = require('highlight.js')
+
+marked.setOptions({
+  highlight: function (code) {
+    var hl = highlight.highlightAuto(code, ['javascript'])
+    return hl.value
+  }
+});
 
 var layout = createTemplate('layout')
 var header = createTemplate('header')

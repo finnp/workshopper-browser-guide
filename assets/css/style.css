@@ -134,12 +134,14 @@ a:hover {
   text-decoration: line-through;
 }
 
-code, .outof {
+pre {
   border: 1px solid #9DA6B3;
-  padding: 4px 6px;
   border-radius: 2px;
-  font-family: Liberation Mono, Monaco, Courier New, monospace;
-  white-space: nowrap;
+  overflow-x: overlay;
+}
+
+code, .outof {
+  padding: 4px 6px;
 }
 
 footer {
