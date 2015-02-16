@@ -28,6 +28,7 @@ module.exports = function (moduleDir, opts) {
   var repo = githuburlfromgit(packagejson.repository.url)
   
   var appName = opts.appName || packagejson.name
+  var appTitle = opts.title || appName
   
   var langs = getLanguages()
   
@@ -59,12 +60,12 @@ module.exports = function (moduleDir, opts) {
           nextname: localizeExerciseName(exercises[index+1], lang),
           repo: repo
         }),
-        workshoppername: opts.name,
+        workshoppername: appTitle,
         header: header({
           challengetitle: exerciseName,
           challengetotal: exercises.length,
           challengenumber: index + 1,
-          workshoppername: opts.name,
+          workshoppername: appTitle,
           preurl: preurl,
           nexturl: nexturl,
           lang: lang.id,
@@ -91,7 +92,7 @@ module.exports = function (moduleDir, opts) {
     // proper path resolution
     contents = contents.replace(/\{rootdir:([^}]+)\}/gi, function (match, subpath) {
       // how to link this in a sensible way, so that it will work online/offline?
-      return '[' + subpath + '](' + repo + '/blob/master' + subpath + ')'
+      return '[' + subpath + '](' + '..' + subpath + ')'
     })
     
     return contents
@@ -133,7 +134,7 @@ module.exports = function (moduleDir, opts) {
     
     var content = indexTemplate({
       challenges: challenges,
-      workshoppername: opts.name,
+      workshoppername: appTitle,
       repo: repo,
       langs: templateLangs('index', langs)
     })
