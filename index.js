@@ -1,11 +1,12 @@
 var fs = require('fs-extra')
 var path = require('path')
 var marked = require('marked')
-var readjson = require('read-json-file')
 var hb = require('handlebars')
 var highlight = require('highlight.js')
 var githuburlfromgit = require('github-url-from-git')
 var localizeLang = require('local-lang-names')
+var lightness = require('lightness')
+var contrast = require('get-contrast')
 
 marked.setOptions({
   highlight: function (code) {
@@ -37,6 +38,20 @@ module.exports = function (moduleDir, opts) {
   } catch(e) {}
   
   fs.copySync(path.join(__dirname, 'assets'), path.join(outputDir, 'assets'))
+  
+  // adjust colors
+  
+  var stylepath = path.join(outputDir, 'assets', 'css', 'style.css')
+  var styleTemplate = hb.compile(fs.readFileSync(stylepath).toString())
+  opts.color = opts.color || '#0067c1'
+  if(!contrast.isAccessible(opts.color, '#ffffff')) {
+    console.error('Warning:', opts.color, 'does not provide enough contrast to be accessible.')
+  }
+  fs.writeFileSync(stylepath, styleTemplate({
+    'color': opts.color,
+    'color-lighter': lightness(opts.color, 15) // '#4BABFF'
+  })) 
+  
   
   var exercises = JSON.parse(fs.readFileSync(path.join(exerciseDir, 'menu.json')))
 

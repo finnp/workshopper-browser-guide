@@ -23,12 +23,13 @@
   "homepage": "https://github.com/finnp/workshopper-browser-guide",
   "dependencies": {
     "fs-extra": "^0.16.3",
+    "get-contrast": "0.0.1",
     "github-url-from-git": "^1.4.0",
     "handlebars": "^3.0.0",
     "highlight.js": "^8.4.0",
+    "lightness": "^1.0.0",
     "local-lang-names": "^1.0.0",
     "marked": "^0.3.3",
-    "minimist": "^1.1.0",
-    "read-json-file": "^1.0.1"
+    "minimist": "^1.1.0"
   }
 }

@@ -58,13 +58,13 @@ li {
 .hand {
   font-size: 40px;
   padding: 4px 0;
-  color: #0087ff;
+  color: {{color}};
 }
 
 .challenge-name {
   text-transform: capitalize;
   font-weight: 900;
-  color: #0087ff;
+  color: {{color}};
 }
 
 .site-header {
@@ -78,7 +78,7 @@ li {
 }
 
 .filledblock:hover {
-  background: #4BABFF;
+  background: {{color-lighter}};
   color: #fff;
   text-shadow: #fff 0px 0px 5px;
 }
@@ -101,12 +101,12 @@ h1, h2, h3, h4 {
 }
 
 a {
-  color: #0087ff;
+  color: {{color}};
   text-decoration: none;
 }
 
 a:hover {
-  color: #4BABFF;
+  color: {{color-lighter}};
 }
 
 .toc li {
@@ -145,7 +145,7 @@ code, .outof {
 }
 
 footer {
-  border-top: 3px solid #0087ff;
+  border-top: 3px solid {{color}};
   margin: 20px 0;
   padding: 12px 0;
 }
@@ -174,7 +174,7 @@ footer ul li {
   background: #BADFFF;
   padding: 18px;
   margin: 18px 0;
-  color: #0087ff;
+  color: {{color}};
 }
 
 #git-tips ul {
@@ -184,7 +184,7 @@ footer ul li {
 }
 
 #git-tips code, .didnt-pass code {
-  border-color: #0087ff;
+  border-color: {{color}};
 }
 
 #git-tips li {
@@ -192,7 +192,7 @@ footer ul li {
 }
 
 .challenge, .verify {
-  background-color: #0087ff;
+  background-color: {{color}};
   color: #fff;
   padding: 18px 18px 5px;
 }
@@ -236,7 +236,7 @@ blockquote {
 }
 
 .weehero {
-  background-color: #0087ff;
+  background-color: {{color}};
   padding: 30px;
   text-align: center;
   color: #fff;
