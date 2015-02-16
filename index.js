@@ -21,13 +21,13 @@ var indexTemplate = createTemplate('index')
 
 module.exports = function (moduleDir, opts) {
   opts = opts || {}
-  var outputDir = opts.outputDir || path.join(moduleDir, 'guide')
+  var outputDir = opts.output || path.join(moduleDir, 'guide')
   var exerciseDir = path.join(moduleDir, 'exercises')
   
   var packagejson = require(path.join(moduleDir, 'package.json'))
   var repo = githuburlfromgit(packagejson.repository.url)
   
-  var appName = opts.appName || packagejson.name
+  var appName = opts.name || packagejson.name
   var appTitle = opts.title || appName
   
   var langs = getLanguages()
