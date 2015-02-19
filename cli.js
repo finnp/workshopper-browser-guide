@@ -6,8 +6,9 @@ var minimist = require('minimist')
 var opts = minimist(process.argv.splice(2))
 
 if(opts.h || opts.help) {
-  console.log('usage: workshopper-browser-guide')
+  console.log('usage: workshopper-browser-guide [opts]')
   console.log('options:')
+  console.log('\t--dir\n\t\tapp dir (defaults to process.cwd())')
   console.log('\t--output\n\t\toutput dir (defaults to ./guide)')
   console.log('\t--name\n\t\tapp name (defaults to package.json name)')
   console.log('\t--title\n\t\tapp title (defaults to app name)')
@@ -15,4 +16,4 @@ if(opts.h || opts.help) {
   process.exit()
 }
 
-createGuide(process.cwd(), opts)
+createGuide(opts)

@@ -20,8 +20,9 @@ var header = createTemplate('header')
 var footer = createTemplate('footer')
 var indexTemplate = createTemplate('index')
 
-module.exports = function (moduleDir, opts) {
+module.exports = function (opts) {
   opts = opts || {}
+  var moduleDir = opts.dir || process.cwd()
   var outputDir = opts.output || path.join(moduleDir, 'guide')
   var exerciseDir = path.join(moduleDir, 'exercises')
   

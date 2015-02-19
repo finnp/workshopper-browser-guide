@@ -4,8 +4,10 @@
 ## usage
 ```
 $ workshopper-browser-guide --help
-usage: workshopper-browser-guide
+usage: workshopper-browser-guide [opts]
 options:
+	--dir
+		app dir (defaults to process.cwd())
 	--output
 		output dir (defaults to ./guide)
 	--name
@@ -13,4 +15,5 @@ options:
 	--title
 		app title (defaults to app name)
 	--color
+		color style (defaults to blue)
 ```
