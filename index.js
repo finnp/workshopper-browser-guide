@@ -23,10 +23,10 @@ var indexTemplate = createTemplate('index')
 module.exports = function (opts) {
   opts = opts || {}
   var moduleDir = opts.dir || process.cwd()
-  var outputDir = opts.output || path.join(moduleDir, 'guide')
-  var exerciseDir = path.join(moduleDir, 'exercises')
+  var outputDir = opts.output || path.resolve(moduleDir, 'guide')
+  var exerciseDir = path.resolve(moduleDir, 'exercises')
   
-  var packagejson = require(path.join(moduleDir, 'package.json'))
+  var packagejson = require(path.resolve(moduleDir, 'package.json'))
   var repo = githuburlfromgit(packagejson.repository.url)
   
   var appName = opts.name || packagejson.name
