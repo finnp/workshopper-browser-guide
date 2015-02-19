@@ -77,7 +77,7 @@ module.exports = function (moduleDir, opts) {
         }),
         workshoppername: appTitle,
         header: header({
-          challengetitle: exerciseName,
+          challengetitle: localizeExerciseName(exerciseName, lang),
           challengetotal: exercises.length,
           challengenumber: index + 1,
           workshoppername: appTitle,
